@@ -1,0 +1,9 @@
+{
+    "name": "com.weggo.core",
+    "displayName": "WeggoCore Framework",
+    "version": "0.3.0",
+    "unity": "2018.3",
+    "description": "Weggo Core.",
+    "keywords": ["Core"],
+    "category": "Framework"
+}
