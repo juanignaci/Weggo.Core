@@ -2,17 +2,41 @@
 using UnityEngine;
 using UnityEngine.AI;
 using Weggo.Core;
+using System.Linq;
 
 namespace Weggo.AI
 {
-    public abstract class AgentBehaviour : CharacterBehaviour
+    public enum Actions
+    {
+        NoAction,
+        Action1,
+        Action2
+    }
+
+    public class AgentBehaviour : CharacterBehaviour
     {
         public Agent agent;
         public bool isMoving = false;
+        [SerializeField]
+        protected Actions[] possibleActions;
         public List<AgentAction> actionQueue = new List<AgentAction>();
-        NavMeshPath path = new NavMeshPath();
+        NavMeshPath path;
 
-        public override void OnInit() { agent = (Agent)c; }
+        private void Awake()
+        {
+            path = new NavMeshPath();
+        }
+
+        public override void OnInit()
+        {
+            agent = (Agent)c;
+            RegisterPossibleActions();
+
+            if (possibleActions == default || possibleActions.Length == 0)
+                Debug.LogError("There are not possible actions for this agent!");
+        }
+
+        protected virtual void RegisterPossibleActions() { }
 
         public override void UpdateBehaviour()
         {
@@ -24,8 +48,8 @@ namespace Weggo.AI
             }
 
             if (actionQueue.Count == 0)
-                return;
-
+                return;// actionQueue.Add(AgentAction.Create(this, possibleActions[0]));
+            
             if (actionQueue[0].isFinished)
                 actionQueue.RemoveAt(0);
             else
@@ -55,5 +79,10 @@ namespace Weggo.AI
                 return null;
             }
         }
-    } 
+
+        public bool CanDo(Actions action)
+        {
+            return possibleActions.Contains(action);
+        }
+    }
 }

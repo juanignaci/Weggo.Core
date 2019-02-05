@@ -6,7 +6,7 @@ namespace Weggo.AI
 {
     public class Agent : Character
     {
-        new public AgentBehaviour behaviour;
+        public AgentBehaviour aBehaviour;
         [SerializeField]
         int ticksPerSecond = 15;
         float _tickTime { get { return 1.0f / ticksPerSecond; } }
@@ -15,8 +15,8 @@ namespace Weggo.AI
         protected override void Reset()
         {
             base.Reset();
-            base.behaviour = null;
-            behaviour = GetComponent<AgentBehaviour>();
+            behaviour = null;
+            aBehaviour = GetComponent<AgentBehaviour>();
         }
 
         protected override void Update()
@@ -24,7 +24,7 @@ namespace Weggo.AI
             movement.Update();
             rBody.velocity = movement.GetVelocity();
 
-            behaviour.UpdateBehaviour();
+            aBehaviour.UpdateBehaviour();
 
             if (Time.realtimeSinceStartup < lastTick + _tickTime)
                 return;
@@ -36,7 +36,7 @@ namespace Weggo.AI
 
         protected virtual void OnTick()
         {
-            behaviour.OnBehaviourTick();
+            aBehaviour.OnBehaviourTick();
         }
 
         public void Move(NavMeshPath path)
